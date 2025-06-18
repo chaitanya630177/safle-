@@ -124,3 +124,18 @@ resource "aws_security_group" "vpc_sg" {
     Name = "${var.project_name}-${var.environment}-vpc-sg"
   }
 }
+
+module "asg_alb" {
+  source             = "./modules/asg_alb"
+  project_name       = var.project_name
+  environment        = var.environment
+  vpc_id             = module.vpc.vpc_id
+  public_subnet_ids  = module.vpc.public_subnet_ids
+  private_subnet_ids = module.vpc.private_subnet_ids
+  alb_sg_id          = module.vpc.vpc_sg_id
+  ami_id             = var.ami_id
+  instance_type      = var.instance_type
+  desired_capacity   = var.desired_capacity
+  max_size           = var.max_size
+  min_size           = var.min_size
+}
